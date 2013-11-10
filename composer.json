@@ -1,0 +1,19 @@
+{
+    "name": "bandar/bandar",
+    "type": "library",
+    "description": "Fully tested, super minimalistic PHP template engine for PHP 5.2, 5.3, 5.4, 5.5",
+    "keywords": ["template", "template engine", "engine"],
+    "homepage": "http://github.com/yani-/bandar",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yani Iliev",
+            "email": "yani@iliev.me",
+            "homepage": "https://yani.iliev.me",
+            "role": "developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.2.0"
+    }
+}
