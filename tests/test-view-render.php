@@ -36,11 +36,56 @@
 class TestViewRender extends PHPUnit_Framework_TestCase
 {
     /**
-     * [testPluginIsLoaded description]
+     * [testConfigNotSetTriggersError description]
+     *
+     * @expectedException PHPUnit_Framework_Error
      *
      * @return void
      */
-    public function testPluginIsLoaded()
+    public function testConfigNotSetTriggersError()
+    {
+        Bandar::render('none/none');
+    }
+
+    /**
+     * [testNotFoundViewTriggersError description]
+     *
+     * @expectedException PHPUnit_Framework_Error
+     *
+     * @return void
+     */
+    public function testNotFoundViewTriggersError()
+    {
+        Bandar::setup(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'test_views');
+        Bandar::render('none/none');
+    }
+
+    /**
+     * [testGlobalConfigSet description]
+     *
+     * @return void
+     */
+    public function testGlobalConfigSet()
+    {
+        define(
+            'BANDAR_VIEW_PATH',
+            dirname(__FILE__) . DIRECTORY_SEPARATOR . 'test_views'
+        );
+        ob_start();
+        Bandar::render('users/list', array('name' => 'John Smith'));
+        $renderedView = ob_get_clean();
+        $this->assertEquals(
+            $renderedView,
+            'Hello John Smith'
+        );
+    }
+
+    /**
+     * [testViewCanBeRendered description]
+     *
+     * @return void
+     */
+    public function testViewCanBeRendered()
     {
         Bandar::setup(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'test_views');
         ob_start();
