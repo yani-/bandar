@@ -33,25 +33,17 @@ require_once
  * argument to the function
  */
 define(
-    'BANDAR_VIEW_PATH',
+    'BANDAR_TEMPLATES_PATH',
     dirname(__FILE__) . DIRECTORY_SEPARATOR . 'views'
 );
+$view = new Bandar;
+$view->render('index', array('name' => 'Hello World'));
 
 /**
  * Altenative views folder configuration. Note that BANDAR_VIEW_PATH constant
  * takes precedence if it is set
  */
-Bandar::setup(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'views');
-
-/**
- * Render index.php file, note that the file extension must be omitted
- * Arguments are passed as second parameter of the render function and must be
- * an array
- */
-Bandar::render('index', array('name' => 'Hello World'));
-
-/**
- * Altenative passing of parameters
- */
-$args = array('name' => 'Hello World Alternative');
-Bandar::render('index', $args);
+$view = new Bandar(
+    dirname(__FILE__) . DIRECTORY_SEPARATOR . 'views'
+);
+$view->render('index', array('name' => 'Hello World'));
