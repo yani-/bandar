@@ -23,12 +23,6 @@
  */
 
 /**
- * Set global view path here
- * Example: define('BANDAR_VIEW_PATH', dirname(__FILE__) . '/views');
- */
-define('BANDAR_VIEW_PATH', null);
-
-/**
  * Bandar Main class
  *
  * @category  Templates
@@ -80,7 +74,7 @@ class Bandar
         extract($args);
         ob_start();
         // including the view
-        include_once self::getViewPath() . DIRECTORY_SEPARATOR . $view . '.php';
+        include self::getViewPath() . DIRECTORY_SEPARATOR . $view . '.php';
         return ob_get_flush();
     }
 
@@ -127,7 +121,8 @@ class Bandar
     {
         // if self::$view_path is set return it, else return the the
         // value of BANDAR_VIEW_PATH const
-        return is_null(self::$view_path) ? BANDAR_VIEW_PATH : self::$view_path;
+        return defined('BANDAR_VIEW_PATH') ? BANDAR_VIEW_PATH
+                                           : self::$view_path;
     }
 
     /**
