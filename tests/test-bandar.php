@@ -197,57 +197,5 @@ class BandarTest extends PHPUnit_Framework_TestCase
             $bandar->templateExists('does-not-exist.php')
         );
     }
-
-    /**
-     * [testTemplateExists description]
-     *
-     * @depends testInitBandar
-     * @depends testSetTemplatesPath
-     * @depends testGetTemplatesPath
-     * @depends testSetTemplate
-     * @depends testGetTemplate
-     *
-     * @return void
-     */
-    public function testRender()
-    {
-        $bandar = new Bandar(
-            dirname(__FILE__) . DIRECTORY_SEPARATOR . 'templates'
-        );
-        ob_start();
-        $bandar->render('users/list', array('name' => 'John Smith'));
-        $renderedContent = ob_get_clean();
-        $this->assertEquals(
-            'Hello John Smith',
-            $renderedContent
-        );
-    }
-
-    /**
-     * [testRenderInvalidFile description]
-     *
-     * @depends testInitBandar
-     * @depends testSetTemplatesPath
-     * @depends testGetTemplatesPath
-     * @depends testSetTemplate
-     * @depends testGetTemplate
-     * @depends testRender
-     * @expectedException TemplateDoesNotExistException
-     *
-     * @return void
-     */
-    public function testRenderInvalidFile()
-    {
-        $bandar = new Bandar(
-            dirname(__FILE__) . DIRECTORY_SEPARATOR . 'templates'
-        );
-        ob_start();
-        $bandar->render('does-not-exist', array('name' => 'John Smith'));
-        $renderedContent = ob_get_clean();
-        $this->assertEquals(
-            'Hello John Smith',
-            $renderedContent
-        );
-    }
 }
 
