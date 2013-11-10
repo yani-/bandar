@@ -1,8 +1,9 @@
 <?php
+
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * Bootstrap file for unit tests used in Bandar template engine
+ * Provides unit tests for Bandar template engine
  *
  * PHP version 5
  *
@@ -24,15 +25,43 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @category  Tests
- * @package   Bandar_Views
+ * @package   Bandar_Tests
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2013 Yani Iliev
  * @license   https://raw.github.com/yani-/bandar/master/LICENSE The MIT License (MIT)
  * @version   GIT: 1.0.0
  * @link      https://github.com/yani-/bandar/
  */
-require_once
-    dirname(__FILE__) .
-    DIRECTORY_SEPARATOR . '..' .
-    DIRECTORY_SEPARATOR . 'lib' .
-    DIRECTORY_SEPARATOR . 'Bandar.php';
+
+/**
+ * Unit test class
+ *
+ * @category  Tests
+ * @package   Bandar_Tests
+ * @author    Yani Iliev <yani@iliev.me>
+ * @copyright 2013 Yani Iliev
+ * @license   https://raw.github.com/yani-/bandar/master/LICENSE The MIT License (MIT)
+ * @version   Release: 1.0.0
+ * @link      https://github.com/yani-/bandar/
+ */
+class BandarTestGetTemplatesPathFromConstant extends PHPUnit_Framework_TestCase
+{
+    /**
+     * [testSetTemplatesPathSetConstantPassNull description]
+     *
+     * @runInSeparateProcess
+     *
+     * @return void
+     */
+    public function testGetTemplatesPathFromConstant()
+    {
+        $bandar = new Bandar('dummy view');
+        define('BANDAR_TEMPLATES_PATH', 'path/to/somewhere3');
+        $this->assertEquals(
+            'path/to/somewhere3',
+            $bandar->getTemplatesPathFromConstant()
+        );
+    }
+
+}
+

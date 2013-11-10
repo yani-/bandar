@@ -1,8 +1,9 @@
 <?php
+
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * Bootstrap file for unit tests used in Bandar template engine
+ * Contains TemplatesPathNotSetException class to be used in main Bandar class
  *
  * PHP version 5
  *
@@ -23,16 +24,27 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @category  Tests
- * @package   Bandar_Views
+ * @category  Exceptions
+ * @package   Bandar
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2013 Yani Iliev
  * @license   https://raw.github.com/yani-/bandar/master/LICENSE The MIT License (MIT)
  * @version   GIT: 1.0.0
  * @link      https://github.com/yani-/bandar/
  */
-require_once
-    dirname(__FILE__) .
-    DIRECTORY_SEPARATOR . '..' .
-    DIRECTORY_SEPARATOR . 'lib' .
-    DIRECTORY_SEPARATOR . 'Bandar.php';
+
+/**
+ * TemplatesPathNotSetException
+ *
+ * @category  Exceptions
+ * @package   Bandar
+ * @author    Yani Iliev <yani@iliev.me>
+ * @copyright 2013 Yani Iliev
+ * @license   https://raw.github.com/yani-/bandar/master/LICENSE The MIT License (MIT)
+ * @version   Release: 1.0.0
+ * @link      https://github.com/yani-/bandar/
+ */
+class TemplatesPathNotSetException extends Exception
+{
+
+}

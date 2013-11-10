@@ -3,15 +3,26 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * Short description for file
+ * Main template engine file
  *
  * PHP version 5
  *
- * LICENSE: This source file is subject to version 3.01 of the PHP license
- * that is available through the world-wide-web at the following URI:
- * http://www.php.net/license/3_01.txt.  If you did not receive a copy of
- * the PHP License and are unable to obtain it through the web, please
- * send a note to license@php.net so we can mail you a copy immediately.
+ * LICENSE: Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the "Software"), to
+ * deal in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @category  Templates
  * @package   Bandar
@@ -23,10 +34,20 @@
  */
 
 /**
- * Set global view path here
- * Example: define('BANDAR_VIEW_PATH', dirname(__FILE__) . '/views');
+ * Include exceptions
  */
-define('BANDAR_VIEW_PATH', null);
+require_once
+    dirname(__FILE__) .
+    DIRECTORY_SEPARATOR .
+    'Exceptions' .
+    DIRECTORY_SEPARATOR .
+    'TemplatesPathNotSetException.php';
+require_once
+    dirname(__FILE__) .
+    DIRECTORY_SEPARATOR .
+    'Exceptions' .
+    DIRECTORY_SEPARATOR .
+    'TemplateDoesNotExistException.php';
 
 /**
  * Bandar Main class
@@ -46,99 +67,134 @@ class Bandar
      *
      * @var string|null
      */
-    public static $view_path = null;
+    public $templatesPath = null;
 
     /**
-     * Setup the template engine
-     *
-     * @param string $view_path Path to template files
-     *
-     * @return [type] [description]
+     * Template file to output
+     * @var string|null
      */
-    public static function setup($view_path)
+    public $template = null;
+
+    /**
+     * Initializes the class and sets templatesPath
+     *
+     * @param string|null $templatesPath Path to templates folder
+     */
+    public function __construct($templatesPath = null)
     {
-        self::$view_path = $view_path;
+        $this->setTemplatesPath($templatesPath);
     }
 
     /**
-     * Render a template
+     * Setter for templatesPath
      *
-     * @param string $view Template name
-     * @param array  $args Variables to pass to the template file
+     * @param string|null $templatesPath Templates path
+     *
+     * @return Instance of Bandar
+     */
+    public function setTemplatesPath($templatesPath)
+    {
+        if (is_null($templatesPath)) {
+            // no view path is passed, use BANDAR_TEMPLATES_PATH
+            $this->templatesPath = $this->getTemplatesPathFromConstant();
+        } else {
+            $this->templatesPath = $templatesPath;
+        }
+        return $this;
+    }
+
+    /**
+     * Retrieves templatesPath from BANDAR_TEMPLATES_PATH constant
+     *
+     * @throws TemplatesPathNotSetException If BANDAR_TEMPLATES_PATH is not defined
+     *
+     * @return string Templates path
+     */
+    public function getTemplatesPathFromConstant()
+    {
+        if (!defined('BANDAR_TEMPLATES_PATH')) {
+            throw new TemplatesPathNotSetException;
+        } else {
+            return BANDAR_TEMPLATES_PATH;
+        }
+    }
+
+    /**
+     * Getter for templatesPath
+     *
+     * @return string Template path
+     */
+    public function getTemplatesPath()
+    {
+        return $this->templatesPath;
+    }
+
+    /**
+     * Setter for template
+     *
+     * @param string $template Template file
+     *
+     * @throws TemplateDoesNotExistException If template file is not found
+     *
+     * @return Instance of Bandar
+     */
+    public function setTemplate($template)
+    {
+        // replacing directory separator with the default one for the OS
+        $template = str_replace('/', DIRECTORY_SEPARATOR, $template) . '.php';
+
+        if ($this->templateExists($template)) {
+            $this->template = $template;
+        } else {
+            throw new TemplateDoesNotExistException;
+        }
+        return $this;
+    }
+
+    /**
+     * Checks if template exists by using file_exists
+     *
+     * @param string $template Template file
+     *
+     * @return boolean
+     */
+    public function templateExists($template)
+    {
+        return file_exists(
+            $this->getTemplatesPath() . DIRECTORY_SEPARATOR . $template
+        );
+    }
+
+    /**
+     * Getter for template
+     *
+     * @return string Template file with path
+     */
+    public function getTemplate()
+    {
+        return $this->template;
+    }
+
+    /**
+     * Renders a passed template
+     *
+     * @param string $template Template name
+     * @param array  $args     Variables to pass to the template file
      *
      * @return string Contents of the template
      */
-    public static function render($view, $args=array())
+    public function render($template, $args=array())
     {
-        // replacing directory separator with the default one for the OS
-        $view = str_replace('/', DIRECTORY_SEPARATOR, $view);
-        // validate that the config is valid
-        self::checkConfig();
-        // validate that the view file exists
-        self::validateView($view);
+        $this->setTemplate($template);
         // extracting passed aguments
         extract($args);
         ob_start();
         // including the view
-        include_once self::getViewPath() . DIRECTORY_SEPARATOR . $view . '.php';
+        include
+            $this->getTemplatesPath() .
+            DIRECTORY_SEPARATOR .
+            $this->getTemplate();
+
         return ob_get_flush();
-    }
-
-    /**
-     * [validateView description]
-     *
-     * @param string $view Template file
-     *
-     * @return void
-     */
-    public static function validateView($view)
-    {
-        if (!file_exists(self::getPathToView($view))) {
-            trigger_error(
-                'The file you are trying to see `' .
-                self::getPathToView($view) .
-                '` doesn\'t exist.',
-                E_USER_ERROR
-            );
-        }
-    }
-
-    /**
-     * [checkConfig description]
-     *
-     * @return void
-     */
-    public static function checkConfig()
-    {
-        if (is_null(self::getViewPath())) {
-            trigger_error(
-                'You need to setup the engine before using it.',
-                E_USER_ERROR
-            );
-        }
-    }
-
-    /**
-     * [getViewPath description]
-     *
-     * @return string|null View path
-     */
-    public static function getViewPath()
-    {
-        // if self::$view_path is set return it, else return the the
-        // value of BANDAR_VIEW_PATH const
-        return is_null(self::$view_path) ? BANDAR_VIEW_PATH : self::$view_path;
-    }
-
-    /**
-     * [getPathToView description]
-     *
-     * @param string $view Template file
-     *
-     * @return string       Path to template file
-     */
-    public static function getPathToView($view)
-    {
-        return self::getViewPath() . DIRECTORY_SEPARATOR . $view . '.php';
     }
 }

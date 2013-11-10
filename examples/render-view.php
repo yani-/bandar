@@ -1,8 +1,9 @@
 <?php
+
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * Bootstrap file for unit tests used in Bandar template engine
+ * This file shows an example use of Bandar template engine
  *
  * PHP version 5
  *
@@ -23,8 +24,8 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @category  Tests
- * @package   Bandar_Views
+ * @category  Examples
+ * @package   Bandar
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2013 Yani Iliev
  * @license   https://raw.github.com/yani-/bandar/master/LICENSE The MIT License (MIT)
@@ -36,3 +37,24 @@ require_once
     DIRECTORY_SEPARATOR . '..' .
     DIRECTORY_SEPARATOR . 'lib' .
     DIRECTORY_SEPARATOR . 'Bandar.php';
+
+/**
+ * Set BANDAR_VIEW_PATH to the path of your views folder
+ * Alternatively you can call Bandar::setup($path) and pass your path as an
+ * argument to the function
+ */
+define(
+    'BANDAR_TEMPLATES_PATH',
+    dirname(__FILE__) . DIRECTORY_SEPARATOR . 'views'
+);
+$view = new Bandar;
+$view->render('index', array('name' => 'Hello World'));
+
+/**
+ * Altenative views folder configuration. Note that BANDAR_VIEW_PATH constant
+ * takes precedence if it is set
+ */
+$view = new Bandar(
+    dirname(__FILE__) . DIRECTORY_SEPARATOR . 'views'
+);
+$view->render('index', array('name' => 'Hello World'));

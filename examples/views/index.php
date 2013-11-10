@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * Bootstrap file for unit tests used in Bandar template engine
+ * This is an example view file
  *
  * PHP version 5
  *
@@ -23,7 +23,7 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @category  Tests
+ * @category  Examples
  * @package   Bandar_Views
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2013 Yani Iliev
@@ -31,8 +31,5 @@
  * @version   GIT: 1.0.0
  * @link      https://github.com/yani-/bandar/
  */
-require_once
-    dirname(__FILE__) .
-    DIRECTORY_SEPARATOR . '..' .
-    DIRECTORY_SEPARATOR . 'lib' .
-    DIRECTORY_SEPARATOR . 'Bandar.php';
+?>
+I am an example view. This is how you output params: <?php echo $name; ?>

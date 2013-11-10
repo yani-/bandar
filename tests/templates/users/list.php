@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * Bootstrap file for unit tests used in Bandar template engine
+ * Template view used in Bandar engine unit tests
  *
  * PHP version 5
  *
@@ -31,8 +31,5 @@
  * @version   GIT: 1.0.0
  * @link      https://github.com/yani-/bandar/
  */
-require_once
-    dirname(__FILE__) .
-    DIRECTORY_SEPARATOR . '..' .
-    DIRECTORY_SEPARATOR . 'lib' .
-    DIRECTORY_SEPARATOR . 'Bandar.php';
+?>
+Hello <?php echo $name; ?>
