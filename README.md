@@ -25,7 +25,7 @@ Alternative initialization of templates path
 ```php
 // test.php
 require_once 'lib/Bandar.php';
-$bandar = new Bandar('BANDAR_TEMPLATES_PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'views');
+$bandar = new Bandar(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'views');
 $bandar->render('users/list', array('users' => array('name' => 'John Smith')));
 ```
 Finally run it
