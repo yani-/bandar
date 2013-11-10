@@ -23,6 +23,22 @@
  */
 
 /**
+ * Include exceptions
+ */
+require_once
+    dirname(__FILE__) .
+    DIRECTORY_SEPARATOR .
+    'Exceptions' .
+    DIRECTORY_SEPARATOR .
+    'TemplatesPathNotSetException.php';
+require_once
+    dirname(__FILE__) .
+    DIRECTORY_SEPARATOR .
+    'Exceptions' .
+    DIRECTORY_SEPARATOR .
+    'TemplateDoesNotExistException.php';
+
+/**
  * Bandar Main class
  *
  * @category  Templates
@@ -40,100 +56,134 @@ class Bandar
      *
      * @var string|null
      */
-    public static $view_path = null;
+    public $templatesPath = null;
 
     /**
-     * Setup the template engine
-     *
-     * @param string $view_path Path to template files
-     *
-     * @return [type] [description]
+     * Template file to output
+     * @var string|null
      */
-    public static function setup($view_path)
+    public $template = null;
+
+    /**
+     * Initializes the class and sets templatesPath
+     *
+     * @param string|null $templatesPath Path to templates folder
+     */
+    public function __construct($templatesPath = null)
     {
-        self::$view_path = $view_path;
+        $this->setTemplatesPath($templatesPath);
     }
 
     /**
-     * Render a template
+     * Setter for templatesPath
      *
-     * @param string $view Template name
-     * @param array  $args Variables to pass to the template file
+     * @param string|null $templatesPath Templates path
+     *
+     * @return Instance of Bandar
+     */
+    public function setTemplatesPath($templatesPath)
+    {
+        if (is_null($templatesPath)) {
+            // no view path is passed, use BANDAR_TEMPLATES_PATH
+            $this->templatesPath = $this->getTemplatesPathFromConstant();
+        } else {
+            $this->templatesPath = $templatesPath;
+        }
+        return $this;
+    }
+
+    /**
+     * Retrieves templatesPath from BANDAR_TEMPLATES_PATH constant
+     *
+     * @throws TemplatesPathNotSetException If BANDAR_TEMPLATES_PATH is not defined
+     *
+     * @return string Templates path
+     */
+    public function getTemplatesPathFromConstant()
+    {
+        if (!defined('BANDAR_TEMPLATES_PATH')) {
+            throw new TemplatesPathNotSetException;
+        } else {
+            return BANDAR_TEMPLATES_PATH;
+        }
+    }
+
+    /**
+     * Getter for templatesPath
+     *
+     * @return string Template path
+     */
+    public function getTemplatesPath()
+    {
+        return $this->templatesPath;
+    }
+
+    /**
+     * Setter for template
+     *
+     * @param string $template Template file
+     *
+     * @throws TemplateDoesNotExistException If template file is not found
+     *
+     * @return Instance of Bandar
+     */
+    public function setTemplate($template)
+    {
+        // replacing directory separator with the default one for the OS
+        $template = str_replace('/', DIRECTORY_SEPARATOR, $template) . '.php';
+
+        if ($this->templateExists($template)) {
+            $this->template = $template;
+        } else {
+            throw new TemplateDoesNotExistException;
+        }
+        return $this;
+    }
+
+    /**
+     * Checks if template exists by using file_exists
+     *
+     * @param string $template Template file
+     *
+     * @return boolean
+     */
+    public function templateExists($template)
+    {
+        return file_exists(
+            $this->getTemplatesPath() . DIRECTORY_SEPARATOR . $template
+        );
+    }
+
+    /**
+     * Getter for template
+     *
+     * @return string Template file with path
+     */
+    public function getTemplate()
+    {
+        return $this->template;
+    }
+
+    /**
+     * Renders a passed template
+     *
+     * @param string $template Template name
+     * @param array  $args     Variables to pass to the template file
      *
      * @return string Contents of the template
      */
-    public static function render($view, $args=array())
+    public function render($template, $args=array())
     {
-        // replacing directory separator with the default one for the OS
-        $view = str_replace('/', DIRECTORY_SEPARATOR, $view);
-        // validate that the config is valid
-        self::checkConfig();
-        // validate that the view file exists
-        self::validateView($view);
+        $this->setTemplate($template);
         // extracting passed aguments
         extract($args);
         ob_start();
         // including the view
-        include self::getViewPath() . DIRECTORY_SEPARATOR . $view . '.php';
+        include
+            $this->getTemplatesPath() .
+            DIRECTORY_SEPARATOR .
+            $this->getTemplate();
+
         return ob_get_flush();
-    }
-
-    /**
-     * [validateView description]
-     *
-     * @param string $view Template file
-     *
-     * @return void
-     */
-    public static function validateView($view)
-    {
-        if (!file_exists(self::getPathToView($view))) {
-            trigger_error(
-                'The file you are trying to see `' .
-                self::getPathToView($view) .
-                '` doesn\'t exist.',
-                E_USER_ERROR
-            );
-        }
-    }
-
-    /**
-     * [checkConfig description]
-     *
-     * @return void
-     */
-    public static function checkConfig()
-    {
-        if (is_null(self::getViewPath())) {
-            trigger_error(
-                'You need to setup the engine before using it.',
-                E_USER_ERROR
-            );
-        }
-    }
-
-    /**
-     * [getViewPath description]
-     *
-     * @return string|null View path
-     */
-    public static function getViewPath()
-    {
-        // if self::$view_path is set return it, else return the the
-        // value of BANDAR_VIEW_PATH const
-        return defined('BANDAR_VIEW_PATH') ? BANDAR_VIEW_PATH
-                                           : self::$view_path;
-    }
-
-    /**
-     * [getPathToView description]
-     *
-     * @param string $view Template file
-     *
-     * @return string       Path to template file
-     */
-    public static function getPathToView($view)
-    {
-        return self::getViewPath() . DIRECTORY_SEPARATOR . $view . '.php';
     }
 }
