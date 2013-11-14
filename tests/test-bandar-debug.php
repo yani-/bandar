@@ -44,50 +44,49 @@
  * @version   Release: 1.0.0
  * @link      https://github.com/yani-/bandar/
  */
-class BandarTestRender extends PHPUnit_Framework_TestCase
+class BandarTestDebug extends PHPUnit_Framework_TestCase
 {
     /**
-     * [testTemplateExists description]
+     * [testBandarDebug description]
      *
      * @runInSeparateProcess
      *
      * @return void
      */
-    public function testRender()
+    public function testBandarDebug()
     {
-        define(
-            'BANDAR_TEMPLATES_PATH',
-            dirname(__FILE__) . DIRECTORY_SEPARATOR . 'templates'
-        );
+        define('BANDAR_DEBUG', true);
+        $stringToOutput = 'Output string';
         ob_start();
-        Bandar::render(
-            'users/list',
-            array('name' => 'John Smith')
-        );
-        $renderedContent = ob_get_clean();
+        Bandar::debug($stringToOutput);
+        $outputFromBandarDebug = ob_get_contents();
+        ob_end_clean();
         $this->assertEquals(
-            'Hello John Smith',
-            $renderedContent
+            $stringToOutput,
+            $outputFromBandarDebug
         );
     }
 
     /**
-     * [testRenderInvalidFile description]
+     * [testBandarDebugOff description]
      *
-     * @expectedException TemplateDoesNotExistException
-     * @depends testRender
+     * @runInSeparateProcess
      *
      * @return void
      */
-    public function testRenderInvalidFile()
+    public function testBandarDebugOff()
     {
+        define('BANDAR_DEBUG', false);
+        $stringToOutput = 'Output string';
         ob_start();
-        Bandar::render('does-not-exist', array('name' => 'John Smith'));
-        $renderedContent = ob_get_clean();
-        $this->assertEquals(
-            'Hello John Smith',
-            $renderedContent
+        Bandar::debug($stringToOutput);
+        $outputFromBandarDebug = ob_get_contents();
+        ob_end_clean();
+        $this->assertNotEquals(
+            $stringToOutput,
+            $outputFromBandarDebug
         );
     }
+
 }
 
