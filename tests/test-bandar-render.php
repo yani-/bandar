@@ -29,7 +29,7 @@
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2013 Yani Iliev
  * @license   https://raw.github.com/yani-/bandar/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.0.1
+ * @version   GIT: 2.0.0
  * @link      https://github.com/yani-/bandar/
  */
 
@@ -41,7 +41,7 @@
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2013 Yani Iliev
  * @license   https://raw.github.com/yani-/bandar/master/LICENSE The MIT License (MIT)
- * @version   Release: 1.0.0
+ * @version   Release: 2.0.0
  * @link      https://github.com/yani-/bandar/
  */
 class BandarTestRender extends PHPUnit_Framework_TestCase
@@ -55,34 +55,15 @@ class BandarTestRender extends PHPUnit_Framework_TestCase
      */
     public function testRender()
     {
-        $bandar = new Bandar(
-            dirname(__FILE__) . DIRECTORY_SEPARATOR . 'templates'
-        );
-        ob_start();
-        $bandar->render('users/list', array('name' => 'John Smith'));
-        $renderedContent = ob_get_clean();
-        $this->assertEquals(
-            'Hello John Smith',
-            $renderedContent
-        );
-    }
-
-    /**
-     * [testTemplateExists description]
-     *
-     * @runInSeparateProcess
-     *
-     * @return void
-     */
-    public function testRenderWithConstantDefined()
-    {
         define(
             'BANDAR_TEMPLATES_PATH',
             dirname(__FILE__) . DIRECTORY_SEPARATOR . 'templates'
         );
-        $bandar = new Bandar();
         ob_start();
-        $bandar->render('users/list', array('name' => 'John Smith'));
+        Bandar::render(
+            'users/list',
+            array('name' => 'John Smith')
+        );
         $renderedContent = ob_get_clean();
         $this->assertEquals(
             'Hello John Smith',
@@ -94,16 +75,14 @@ class BandarTestRender extends PHPUnit_Framework_TestCase
      * [testRenderInvalidFile description]
      *
      * @expectedException TemplateDoesNotExistException
+     * @depends testRender
      *
      * @return void
      */
     public function testRenderInvalidFile()
     {
-        $bandar = new Bandar(
-            dirname(__FILE__) . DIRECTORY_SEPARATOR . 'templates'
-        );
         ob_start();
-        $bandar->render('does-not-exist', array('name' => 'John Smith'));
+        Bandar::render('does-not-exist', array('name' => 'John Smith'));
         $renderedContent = ob_get_clean();
         $this->assertEquals(
             'Hello John Smith',

@@ -17,23 +17,17 @@ PHP v5.2 and up. Tested on PHP v5.2, v5.3, v5.4, v5.5
 // test.php
 require_once 'lib/Bandar.php';
 define('BANDAR_TEMPLATES_PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'views');
-$bandar = new Bandar;
-$bandar->render('users/list', array('users' => array('name' => 'John Smith')));
+Bandar::render('users/list', array('users' => array('name' => 'John Smith')));
 ```
 ```php
 // views/users/list.php
-foreach ($users as $user) {
-    echo $user->name;
-}
+<ul>
+<?php foreach ($users as $user) : ?>
+    <li><?php echo $user->name; ?></li>
+<?php endforeach; ?>
+</ul>
 ```
-Alternative initialization of templates path
-```php
-// test.php
-require_once 'lib/Bandar.php';
-$bandar = new Bandar(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'views');
-$bandar->render('users/list', array('users' => array('name' => 'John Smith')));
-```
-Finally run it
+Run it
 ```bash
 php test.php
 ```

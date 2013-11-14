@@ -29,19 +29,20 @@
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2013 Yani Iliev
  * @license   https://raw.github.com/yani-/bandar/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.0.1
+ * @version   GIT: 2.0.0
  * @link      https://github.com/yani-/bandar/
  */
 
 /**
+ * Define EOL for CLI and Web
+ */
+if (!defined('BANDAR_EOL')) {
+    define('BANDAR_EOL', php_sapi_name() === 'cli' ? PHP_EOL : '<br />');
+}
+
+/**
  * Include exceptions
  */
-require_once
-    dirname(__FILE__) .
-    DIRECTORY_SEPARATOR .
-    'Exceptions' .
-    DIRECTORY_SEPARATOR .
-    'TemplatesPathNotSetException.php';
 require_once
     dirname(__FILE__) .
     DIRECTORY_SEPARATOR .
@@ -57,7 +58,7 @@ require_once
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2013 Yani Iliev
  * @license   https://raw.github.com/yani-/bandar/master/LICENSE The MIT License (MIT)
- * @version   Release: 1.0.0
+ * @version   Release: 2.0.0
  * @link      https://github.com/yani-/bandar/
  */
 class Bandar
@@ -67,40 +68,29 @@ class Bandar
      *
      * @var string|null
      */
-    public $templatesPath = null;
+    public static $templatesPath = null;
 
     /**
      * Template file to output
      * @var string|null
      */
-    public $template = null;
+    public static $template = null;
 
     /**
-     * Initializes the class and sets templatesPath
+     * Outputs the passed string if Bandar is in debug mode
      *
-     * @param string|null $templatesPath Path to templates folder
+     * @param string $str Debug string to output
+     *
+     * @return void
      */
-    public function __construct($templatesPath = null)
+    public static function debug($str)
     {
-        $this->setTemplatesPath($templatesPath);
-    }
-
-    /**
-     * Setter for templatesPath
-     *
-     * @param string|null $templatesPath Templates path
-     *
-     * @return Instance of Bandar
-     */
-    public function setTemplatesPath($templatesPath)
-    {
-        if (is_null($templatesPath)) {
-            // no view path is passed, use BANDAR_TEMPLATES_PATH
-            $this->templatesPath = $this->getTemplatesPathFromConstant();
-        } else {
-            $this->templatesPath = $templatesPath;
+        /**
+         * if debug flag is on, output the string
+         */
+        if (defined('BANDAR_DEBUG') && BANDAR_DEBUG) {
+            echo $str;
         }
-        return $this;
     }
 
     /**
@@ -108,25 +98,17 @@ class Bandar
      *
      * @throws TemplatesPathNotSetException If BANDAR_TEMPLATES_PATH is not defined
      *
-     * @return string Templates path
+     * @return string|null Templates path
      */
-    public function getTemplatesPathFromConstant()
+    public static function getTemplatesPathFromConstant()
     {
-        if (!defined('BANDAR_TEMPLATES_PATH')) {
-            throw new TemplatesPathNotSetException;
-        } else {
-            return BANDAR_TEMPLATES_PATH;
+        self::debug(
+            'Calling getTemplatesPathFromConstant' . BANDAR_EOL
+        );
+        if (defined('BANDAR_TEMPLATES_PATH')) {
+            return realpath(BANDAR_TEMPLATES_PATH) . DIRECTORY_SEPARATOR;
         }
-    }
-
-    /**
-     * Getter for templatesPath
-     *
-     * @return string Template path
-     */
-    public function getTemplatesPath()
-    {
-        return $this->templatesPath;
+        return null;
     }
 
     /**
@@ -136,19 +118,25 @@ class Bandar
      *
      * @throws TemplateDoesNotExistException If template file is not found
      *
-     * @return Instance of Bandar
+     * @return null
      */
-    public function setTemplate($template)
+    public static function setTemplate($template)
     {
-        // replacing directory separator with the default one for the OS
-        $template = str_replace('/', DIRECTORY_SEPARATOR, $template) . '.php';
-
-        if ($this->templateExists($template)) {
-            $this->template = $template;
+        self::debug(
+            'Calling setTemplate with' . BANDAR_EOL .
+            '$template = ' . $template . BANDAR_EOL .
+            'type of $template is ' . gettype($template) . BANDAR_EOL
+        );
+        $template = self::getTemplatesPathFromConstant() . $template;
+        $template = realpath($template . '.php');
+        /**
+         * Check if passed template exist
+         */
+        if (self::templateExists($template)) {
+            self::$template = $template;
         } else {
             throw new TemplateDoesNotExistException;
         }
-        return $this;
     }
 
     /**
@@ -158,21 +146,14 @@ class Bandar
      *
      * @return boolean
      */
-    public function templateExists($template)
+    public static function templateExists($template)
     {
-        return file_exists(
-            $this->getTemplatesPath() . DIRECTORY_SEPARATOR . $template
+        self::debug(
+            'Calling templateExists with ' . BANDAR_EOL .
+            '$template = ' . $template . BANDAR_EOL .
+            'type of $template is ' . gettype($template) . BANDAR_EOL
         );
-    }
-
-    /**
-     * Getter for template
-     *
-     * @return string Template file with path
-     */
-    public function getTemplate()
-    {
-        return $this->template;
+        return (!is_dir($template) && is_readable($template));
     }
 
     /**
@@ -183,17 +164,25 @@ class Bandar
      *
      * @return string Contents of the template
      */
-    public function render($template, $args=array())
+    public static function render($template, $args=array())
     {
-        $this->setTemplate($template);
-        // extracting passed aguments
+        self::debug(
+            'Calling render with' .
+            '$template = ' . $template . BANDAR_EOL .
+            'type of $template is ' . gettype($template) . BANDAR_EOL .
+            '$args = ' . print_r($args, true) . BANDAR_EOL .
+            'type of $args is ' . gettype($args) . BANDAR_EOL
+        );
+        self::setTemplate($template);
+        /**
+         * Extracting passed aguments
+         */
         extract($args);
         ob_start();
-        // including the view
-        include
-            $this->getTemplatesPath() .
-            DIRECTORY_SEPARATOR .
-            $this->getTemplate();
+        /**
+         * Including the view
+         */
+        include self::$template;
 
         return ob_get_flush();
     }

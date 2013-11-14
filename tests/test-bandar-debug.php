@@ -3,7 +3,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * Contains TemplatesPathNotSetException class to be used in main Bandar class
+ * Provides unit tests for Bandar template engine
  *
  * PHP version 5
  *
@@ -24,27 +24,69 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @category  Exceptions
- * @package   Bandar
+ * @category  Tests
+ * @package   Bandar_Tests
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2013 Yani Iliev
  * @license   https://raw.github.com/yani-/bandar/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.0.1
+ * @version   GIT: 2.0.0
  * @link      https://github.com/yani-/bandar/
  */
 
 /**
- * TemplatesPathNotSetException
+ * Unit test class
  *
- * @category  Exceptions
- * @package   Bandar
+ * @category  Tests
+ * @package   Bandar_Tests
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2013 Yani Iliev
  * @license   https://raw.github.com/yani-/bandar/master/LICENSE The MIT License (MIT)
- * @version   Release: 1.0.0
+ * @version   Release: 2.0.0
  * @link      https://github.com/yani-/bandar/
  */
-class TemplatesPathNotSetException extends Exception
+class BandarTestDebug extends PHPUnit_Framework_TestCase
 {
+    /**
+     * [testBandarDebug description]
+     *
+     * @runInSeparateProcess
+     *
+     * @return void
+     */
+    public function testBandarDebug()
+    {
+        define('BANDAR_DEBUG', true);
+        $stringToOutput = 'Output string';
+        ob_start();
+        Bandar::debug($stringToOutput);
+        $outputFromBandarDebug = ob_get_contents();
+        ob_end_clean();
+        $this->assertEquals(
+            $stringToOutput,
+            $outputFromBandarDebug
+        );
+    }
+
+    /**
+     * [testBandarDebugOff description]
+     *
+     * @runInSeparateProcess
+     *
+     * @return void
+     */
+    public function testBandarDebugOff()
+    {
+        define('BANDAR_DEBUG', false);
+        $stringToOutput = 'Output string';
+        ob_start();
+        Bandar::debug($stringToOutput);
+        $outputFromBandarDebug = ob_get_contents();
+        ob_end_clean();
+        $this->assertNotEquals(
+            $stringToOutput,
+            $outputFromBandarDebug
+        );
+    }
 
 }
+
