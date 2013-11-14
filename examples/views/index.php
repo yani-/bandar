@@ -32,4 +32,5 @@
  * @link      https://github.com/yani-/bandar/
  */
 ?>
-I am an example view. This is how you output params: <?php echo $name; ?>
+I am located in views/index.php
+The value of $name is <?php echo $name; ?>

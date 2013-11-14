@@ -40,21 +40,12 @@ require_once
 
 /**
  * Set BANDAR_VIEW_PATH to the path of your views folder
- * Alternatively you can call Bandar::setup($path) and pass your path as an
- * argument to the function
  */
 define(
     'BANDAR_TEMPLATES_PATH',
     dirname(__FILE__) . DIRECTORY_SEPARATOR . 'views'
 );
-$view = new Bandar;
-$view->render('index', array('name' => 'Hello World'));
-
 /**
- * Altenative views folder configuration. Note that BANDAR_VIEW_PATH constant
- * takes precedence if it is set
+ * Renders views/index.php and passes $name = 'Hello World'
  */
-$view = new Bandar(
-    dirname(__FILE__) . DIRECTORY_SEPARATOR . 'views'
-);
-$view->render('index', array('name' => 'Hello World'));
+Bandar::render('index', array('name' => 'Hello World'));
