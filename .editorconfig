@@ -13,6 +13,7 @@ indent_style = space
 [*.php]
 indent_style = space
 indent_size = 4
+max_line_length = 85
 
 # YAML
 [*.yml]
