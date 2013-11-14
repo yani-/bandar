@@ -28,7 +28,7 @@
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2013 Yani Iliev
  * @license   https://raw.github.com/yani-/bandar/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.0.1
+ * @version   GIT: 2.0.0
  * @link      https://github.com/yani-/bandar/
  */
 ?>
