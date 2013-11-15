@@ -22,9 +22,11 @@ Bandar::render('users/list', array('users' => array('name' => 'John Smith')));
 ```php
 // views/users/list.php
 <ul>
-<?php foreach ($users as $user) : ?>
-    <li><?php echo $user->name; ?></li>
-<?php endforeach; ?>
+<?php
+foreach ($users as $user) {
+    echo '<li>' . $user['name'] . '</li>';
+}
+?>
 </ul>
 ```
 Run it

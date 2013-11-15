@@ -28,9 +28,14 @@
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2013 Yani Iliev
  * @license   https://raw.github.com/yani-/bandar/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.0.0
+ * @version   GIT: 2.0.1
  * @link      https://github.com/yani-/bandar/
  */
 ?>
-I am located in views/index.php
-The value of $name is <?php echo $name; ?>
+<ul>
+<?php
+foreach ($users as $user) {
+    echo '<li>' . $user['name'] . '</li>';
+}
+?>
+</ul>
