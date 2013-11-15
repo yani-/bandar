@@ -1,9 +1,8 @@
 <?php
-
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * This file shows an example use of Bandar template engine
+ * This is an example view file
  *
  * PHP version 5
  *
@@ -25,27 +24,18 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @category  Examples
- * @package   Bandar
+ * @package   Bandar_Views
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2013 Yani Iliev
  * @license   https://raw.github.com/yani-/bandar/master/LICENSE The MIT License (MIT)
  * @version   GIT: 2.0.0
  * @link      https://github.com/yani-/bandar/
  */
-require_once
-    dirname(__FILE__) .
-    DIRECTORY_SEPARATOR . '..' .
-    DIRECTORY_SEPARATOR . 'lib' .
-    DIRECTORY_SEPARATOR . 'Bandar.php';
-
-/**
- * Set BANDAR_VIEW_PATH to the path of your views folder
- */
-define(
-    'BANDAR_TEMPLATES_PATH',
-    dirname(__FILE__) . DIRECTORY_SEPARATOR . 'views'
-);
-/**
- * Renders views/index.php and passes $name = 'Hello World'
- */
-Bandar::render('users/list', array('users' => array(array('name' => 'John Smith'))));
+?>
+<ul>
+<?php
+foreach ($users as $user) {
+    echo '<li>' . $user['name'] . '</li>';
+}
+?>
+</ul>
