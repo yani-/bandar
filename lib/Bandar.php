@@ -186,4 +186,38 @@ class Bandar
 
         return ob_get_flush();
     }
+
+    /**
+     * Returns the content of a passed template
+     *
+     * @param string $template Template name
+     * @param array  $args     Variables to pass to the template file
+     *
+     * @return string Contents of the template
+     */
+    public static function getTemplateContent($template, $args=array())
+    {
+        self::debug(
+            'Calling render with' .
+            '$template = ' . $template . BANDAR_EOL .
+            'type of $template is ' . gettype($template) . BANDAR_EOL .
+            '$args = ' . print_r($args, true) . BANDAR_EOL .
+            'type of $args is ' . gettype($args) . BANDAR_EOL
+        );
+        self::setTemplate($template);
+        /**
+         * Extracting passed aguments
+         */
+        extract($args);
+        ob_start();
+        /**
+         * Including the view
+         */
+        include self::$template;
+
+        $content = ob_get_contents();
+        ob_end_clean();
+
+        return $content;
+    }
 }
