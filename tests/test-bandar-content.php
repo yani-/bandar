@@ -1,8 +1,9 @@
 <?php
+
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * This is an example view file
+ * Provides unit tests for Bandar template engine
  *
  * PHP version 5
  *
@@ -23,27 +24,65 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @category  Examples
- * @package   Bandar_Views
+ * @category  Tests
+ * @package   Bandar_Tests
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2013 Yani Iliev
  * @license   https://raw.github.com/yani-/bandar/master/LICENSE The MIT License (MIT)
  * @version   GIT: 2.1.0
  * @link      https://github.com/yani-/bandar/
  */
-?>
-<div class="container">
-    <div class="left">
-        <ul>
-        <?php
-        foreach ($users as $user) {
-            echo "    <li>" . $user['name'] . '</li>';
-        }
-        echo PHP_EOL;
-        ?>
-        </ul>
-    </div>
-    <div class="right">
-        <?php echo $sidebar; ?>
-    </div>
-</div>
+
+/**
+ * Unit test class
+ *
+ * @category  Tests
+ * @package   Bandar_Tests
+ * @author    Yani Iliev <yani@iliev.me>
+ * @copyright 2013 Yani Iliev
+ * @license   https://raw.github.com/yani-/bandar/master/LICENSE The MIT License (MIT)
+ * @version   Release: 2.1.0
+ * @link      https://github.com/yani-/bandar/
+ */
+class BandarTestContent extends PHPUnit_Framework_TestCase
+{
+    /**
+     * [testGetTemplateContent description]
+     *
+     * @runInSeparateProcess
+     *
+     * @return void
+     */
+    public function testGetTemplateContent()
+    {
+        define(
+            'BANDAR_TEMPLATES_PATH',
+            dirname(__FILE__) . DIRECTORY_SEPARATOR . 'templates'
+        );
+        $content = Bandar::getTemplateContent(
+            'users/list',
+            array('name' => 'John Smith')
+        );
+        $this->assertEquals(
+            'Hello John Smith',
+            $content
+        );
+    }
+
+    /**
+     * [testRenderInvalidFile description]
+     *
+     * @expectedException TemplateDoesNotExistException
+     * @depends testGetTemplateContent
+     *
+     * @return void
+     */
+    public function testGetTemplateContentInvalidFile()
+    {
+        Bandar::getTemplateContent(
+            'does-not-exist',
+            array('name' => 'John Smith')
+        );
+    }
+}
+

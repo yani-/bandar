@@ -32,18 +32,4 @@
  * @link      https://github.com/yani-/bandar/
  */
 ?>
-<div class="container">
-    <div class="left">
-        <ul>
-        <?php
-        foreach ($users as $user) {
-            echo "    <li>" . $user['name'] . '</li>';
-        }
-        echo PHP_EOL;
-        ?>
-        </ul>
-    </div>
-    <div class="right">
-        <?php echo $sidebar; ?>
-    </div>
-</div>
+Sidebar content

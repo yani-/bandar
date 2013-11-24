@@ -1,8 +1,9 @@
 <?php
+
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * This is an example view file
+ * This file shows an example use of Bandar template engine
  *
  * PHP version 5
  *
@@ -24,26 +25,34 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @category  Examples
- * @package   Bandar_Views
+ * @package   Bandar
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2013 Yani Iliev
  * @license   https://raw.github.com/yani-/bandar/master/LICENSE The MIT License (MIT)
  * @version   GIT: 2.1.0
  * @link      https://github.com/yani-/bandar/
  */
-?>
-<div class="container">
-    <div class="left">
-        <ul>
-        <?php
-        foreach ($users as $user) {
-            echo "    <li>" . $user['name'] . '</li>';
-        }
-        echo PHP_EOL;
-        ?>
-        </ul>
-    </div>
-    <div class="right">
-        <?php echo $sidebar; ?>
-    </div>
-</div>
+require_once
+    dirname(__FILE__) .
+    DIRECTORY_SEPARATOR . '..' .
+    DIRECTORY_SEPARATOR . 'lib' .
+    DIRECTORY_SEPARATOR . 'Bandar.php';
+
+/**
+ * Set BANDAR_VIEW_PATH to the path of your views folder
+ */
+define(
+    'BANDAR_TEMPLATES_PATH',
+    dirname(__FILE__) . DIRECTORY_SEPARATOR . 'views'
+);
+/**
+ * Renders views/index.php and passes $name = 'Hello World'
+ */
+$sidebar = Bandar::getTemplateContent('common/sidebar');
+Bandar::render(
+    'users/list',
+    array(
+        'users'   => array(array('name' => 'John Smith')),
+        'sidebar' => $sidebar
+    )
+);

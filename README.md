@@ -14,9 +14,12 @@ PHP v5.2 and up. Tested on PHP v5.2, v5.3, v5.4, v5.5
 
 ### Usage
 ```php
-// test.php
+// example.php
 require_once 'lib/Bandar.php';
-define('BANDAR_TEMPLATES_PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'views');
+define(
+    'BANDAR_TEMPLATES_PATH',
+    dirname(__FILE__) . DIRECTORY_SEPARATOR . 'views'
+);
 Bandar::render('users/list', array('users' => array('name' => 'John Smith')));
 ```
 ```php
@@ -31,7 +34,50 @@ foreach ($users as $user) {
 ```
 Run it
 ```bash
-php test.php
+php example.php
+```
+
+#### Page with sidebar
+```php
+// example-with-sidebar.php
+require_once 'lib/Bandar.php';
+define(
+    'BANDAR_TEMPLATES_PATH',
+    dirname(__FILE__) . DIRECTORY_SEPARATOR . 'views'
+);
+$sidebar = Bandar::getTemplateContent('common/sidebar');
+Bandar::render(
+    'users/list',
+    array(
+        'users'   => array(array('name' => 'John Smith')),
+        'sidebar' => $sidebar
+    )
+);
+```
+```php
+// views/users/list.php
+<div class="container">
+    <div class="left">
+        <ul>
+        <?php
+        foreach ($users as $user) {
+            echo '<li>' . $user['name'] . '</li>';
+        }
+        ?>
+        </ul>
+    </div>
+    <div class="right">
+        <?php echo $sidebar; ?>
+    </div>
+</div>
+```
+```php
+// views/common/sidebar.php
+Sidebar content
+```
+Run it
+```bash
+php example-with-sidebar.php
 ```
 
 ### Tests

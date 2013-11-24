@@ -29,7 +29,7 @@
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2013 Yani Iliev
  * @license   https://raw.github.com/yani-/bandar/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.0.1
+ * @version   GIT: 2.1.0
  * @link      https://github.com/yani-/bandar/
  */
 
@@ -41,7 +41,7 @@
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2013 Yani Iliev
  * @license   https://raw.github.com/yani-/bandar/master/LICENSE The MIT License (MIT)
- * @version   Release: 2.0.0
+ * @version   Release: 2.1.0
  * @link      https://github.com/yani-/bandar/
  */
 class BandarTestRender extends PHPUnit_Framework_TestCase
@@ -81,13 +81,7 @@ class BandarTestRender extends PHPUnit_Framework_TestCase
      */
     public function testRenderInvalidFile()
     {
-        ob_start();
         Bandar::render('does-not-exist', array('name' => 'John Smith'));
-        $renderedContent = ob_get_clean();
-        $this->assertEquals(
-            'Hello John Smith',
-            $renderedContent
-        );
     }
 }
 
