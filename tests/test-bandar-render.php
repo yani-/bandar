@@ -81,13 +81,7 @@ class BandarTestRender extends PHPUnit_Framework_TestCase
      */
     public function testRenderInvalidFile()
     {
-        ob_start();
         Bandar::render('does-not-exist', array('name' => 'John Smith'));
-        $renderedContent = ob_get_clean();
-        $this->assertEquals(
-            'Hello John Smith',
-            $renderedContent
-        );
     }
 }
 
