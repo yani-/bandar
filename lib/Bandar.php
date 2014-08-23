@@ -29,7 +29,7 @@
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2013 Yani Iliev
  * @license   https://raw.github.com/yani-/bandar/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.1.0
+ * @version   GIT: 3.0.0
  * @link      https://github.com/yani-/bandar/
  */
 
@@ -120,14 +120,20 @@ class Bandar
      *
      * @return null
      */
-    public static function setTemplate($template)
+    public static function setTemplate($template, $path = false)
     {
         self::debug(
             'Calling setTemplate with' . BANDAR_EOL .
             '$template = ' . $template . BANDAR_EOL .
             'type of $template is ' . gettype($template) . BANDAR_EOL
         );
-        $template = self::getTemplatesPathFromConstant() . $template;
+
+        if ($path) {
+            $template = realpath($path) . DIRECTORY_SEPARATOR . $template;
+        } else {
+            $template = self::getTemplatesPathFromConstant() . $template;
+        }
+
         $template = realpath($template . '.php');
         /**
          * Check if passed template exist
@@ -164,7 +170,7 @@ class Bandar
      *
      * @return string Contents of the template
      */
-    public static function render($template, $args=array())
+    public static function render($template, $args=array(), $path = false)
     {
         self::debug(
             'Calling render with' .
@@ -173,7 +179,7 @@ class Bandar
             '$args = ' . print_r($args, true) . BANDAR_EOL .
             'type of $args is ' . gettype($args) . BANDAR_EOL
         );
-        self::setTemplate($template);
+        self::setTemplate($template, $path);
         /**
          * Extracting passed aguments
          */
@@ -195,7 +201,7 @@ class Bandar
      *
      * @return string Contents of the template
      */
-    public static function getTemplateContent($template, $args=array())
+    public static function getTemplateContent($template, $args=array(), $path = false)
     {
         self::debug(
             'Calling render with' .
@@ -204,7 +210,7 @@ class Bandar
             '$args = ' . print_r($args, true) . BANDAR_EOL .
             'type of $args is ' . gettype($args) . BANDAR_EOL
         );
-        self::setTemplate($template);
+        self::setTemplate($template, $path);
         /**
          * Extracting passed aguments
          */

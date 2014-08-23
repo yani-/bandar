@@ -29,7 +29,7 @@
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2013 Yani Iliev
  * @license   https://raw.github.com/yani-/bandar/master/LICENSE The MIT License (MIT)
- * @version   GIT: 2.1.0
+ * @version   GIT: 3.0.0
  * @link      https://github.com/yani-/bandar/
  */
 
@@ -41,7 +41,7 @@
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2013 Yani Iliev
  * @license   https://raw.github.com/yani-/bandar/master/LICENSE The MIT License (MIT)
- * @version   Release: 2.1.0
+ * @version   Release: 3.0.0
  * @link      https://github.com/yani-/bandar/
  */
 class BandarTest extends PHPUnit_Framework_TestCase

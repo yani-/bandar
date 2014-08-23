@@ -1,9 +1,8 @@
 <?php
-
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * Provides unit tests for Bandar template engine
+ * Template view used in Bandar engine unit tests
  *
  * PHP version 5
  *
@@ -25,63 +24,12 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @category  Tests
- * @package   Bandar_Tests
+ * @package   Bandar_Views
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2013 Yani Iliev
  * @license   https://raw.github.com/yani-/bandar/master/LICENSE The MIT License (MIT)
  * @version   GIT: 3.0.0
  * @link      https://github.com/yani-/bandar/
  */
-
-/**
- * Unit test class
- *
- * @category  Tests
- * @package   Bandar_Tests
- * @author    Yani Iliev <yani@iliev.me>
- * @copyright 2013 Yani Iliev
- * @license   https://raw.github.com/yani-/bandar/master/LICENSE The MIT License (MIT)
- * @version   Release: 3.0.0
- * @link      https://github.com/yani-/bandar/
- */
-class BandarTestRender extends PHPUnit_Framework_TestCase
-{
-    /**
-     * [testTemplateExists description]
-     *
-     * @runInSeparateProcess
-     *
-     * @return void
-     */
-    public function testRender()
-    {
-        define(
-            'BANDAR_TEMPLATES_PATH',
-            dirname(__FILE__) . DIRECTORY_SEPARATOR . 'templates'
-        );
-        ob_start();
-        Bandar::render(
-            'users/list',
-            array('name' => 'John Smith')
-        );
-        $renderedContent = ob_get_clean();
-        $this->assertEquals(
-            '1. Hello John Smith',
-            $renderedContent
-        );
-    }
-
-    /**
-     * [testRenderInvalidFile description]
-     *
-     * @expectedException TemplateDoesNotExistException
-     * @depends testRender
-     *
-     * @return void
-     */
-    public function testRenderInvalidFile()
-    {
-        Bandar::render('does-not-exist', array('name' => 'John Smith'));
-    }
-}
-
+?>
+2. Hello <?php echo $name; ?>

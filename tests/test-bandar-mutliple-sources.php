@@ -44,21 +44,33 @@
  * @version   Release: 3.0.0
  * @link      https://github.com/yani-/bandar/
  */
-class BandarTestRender extends PHPUnit_Framework_TestCase
+class BandarTestMultipleSources extends PHPUnit_Framework_TestCase
 {
     /**
-     * [testTemplateExists description]
+     * [testGetTemplateContent description]
      *
      * @runInSeparateProcess
      *
      * @return void
      */
-    public function testRender()
+    public function testMutipleSources()
     {
         define(
             'BANDAR_TEMPLATES_PATH',
             dirname(__FILE__) . DIRECTORY_SEPARATOR . 'templates'
         );
+        ob_start();
+        Bandar::render(
+            'users-2/list-2',
+            array('name' => 'John Smith'),
+            dirname(__FILE__) . DIRECTORY_SEPARATOR . 'templates-2'
+        );
+        $renderedContent = ob_get_clean();
+        $this->assertEquals(
+            '2. Hello John Smith',
+            $renderedContent
+        );
+
         ob_start();
         Bandar::render(
             'users/list',
@@ -69,19 +81,6 @@ class BandarTestRender extends PHPUnit_Framework_TestCase
             '1. Hello John Smith',
             $renderedContent
         );
-    }
-
-    /**
-     * [testRenderInvalidFile description]
-     *
-     * @expectedException TemplateDoesNotExistException
-     * @depends testRender
-     *
-     * @return void
-     */
-    public function testRenderInvalidFile()
-    {
-        Bandar::render('does-not-exist', array('name' => 'John Smith'));
     }
 }
 
