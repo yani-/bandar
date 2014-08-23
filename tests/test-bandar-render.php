@@ -66,7 +66,7 @@ class BandarTestRender extends PHPUnit_Framework_TestCase
         );
         $renderedContent = ob_get_clean();
         $this->assertEquals(
-            'Hello John Smith',
+            '1. Hello John Smith',
             $renderedContent
         );
     }
