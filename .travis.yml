@@ -8,3 +8,5 @@ php:
 
 script: phpunit
 
+notifications:
+  slack: servmask:tEmVZL3k9vRLA7avyCseAqH0
